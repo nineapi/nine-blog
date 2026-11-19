@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { getPosts, formatDate } from '../lib/posts';
+
+const posts = await getPosts();
+---
+
+<Base title="NineAPI Blog" description="Notes from building NineAPI: agents that learn from human work, and the review, evaluation and trust that let teams share what they learn.">
+  <section class="intro">
+    <p class="eyebrow">NineAPI Blog</p>
+    <h1>Notes on agents that learn from the work people do.</h1>
+    <p>What we're learning while building NineAPI: how agents learn from real human work, and how teams review, test and share what they learn.</p>
+  </section>
+
+  {posts.length === 0 ? (
+    <p class="empty">The first post is on its way.</p>
+  ) : (
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li>
+          <a href={`/posts/${post.id}/`}>
+            <span class="meta">{formatDate(post.data.date)}</span>
+            {post.data.draft && <span class="draft-badge">draft</span>}
+            <h2>{post.data.title}</h2>
+            <p>{post.data.description}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>
